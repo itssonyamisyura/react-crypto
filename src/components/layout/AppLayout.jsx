@@ -2,12 +2,11 @@ import { Layout , Spin} from 'antd';
 import AppHeader from '../../components/layout/AppHeader';
 import AppSider from '../../components/layout/AppSider';
 import AppContent from '../../components/layout/AppContent';
-import { useContext } from 'react';
-import CryptoContext from '../../context/crypto-context';
+import  { useCrypto } from '../../context/crypto-context';
 
 export default function AppLayout() {
-
-    const {loading} = useContext(CryptoContext)
+    const {loading} = useCrypto()
+    // const {loading} = useContext(CryptoContext)
 
     if (loading) {
         return <Spin fullscreen />

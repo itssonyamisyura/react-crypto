@@ -40,6 +40,7 @@ export function CryptoContextProvider({children}) {
             setAssets(
                 (mapAssets(assets, result)) 
             );
+            console.log(result)
             setCrypto(result);
             setLoading(false);
         }
