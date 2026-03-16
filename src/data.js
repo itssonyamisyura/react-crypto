@@ -509,7 +509,7 @@ export const cryptoData = {
       name: 'Shiba Inu',
       symbol: 'SHIB',
       rank: 18,
-      price: 0.0000092,
+      price: 0.092,
       priceBtc: 2.047897545891194e-10,
       volume: 202179835,
       marketCap: 5426691358,
