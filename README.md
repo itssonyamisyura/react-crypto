@@ -1,8 +1,19 @@
-# React + Vite
+A modern cryptocurrency tracking app built with React.
+It allows users to explore crypto market data, view prices, and track trends in real time.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🚀 About
 
-Currently, two official plugins are available:
+This project is a frontend application created with React that fetches and displays cryptocurrency data from an external API.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The app demonstrates:
+
+Working with REST APIs
+Handling asynchronous data
+Building reusable React components
+Creating responsive UI
+✨ Features
+📊 View list of cryptocurrencies
+💵 Real-time price tracking
+📈 Market data visualization (charts, stats)
+🔍 Search and filter coins
+📱 Responsive design
