@@ -19,15 +19,13 @@ export function CryptoContextProvider({children}) {
         return assets.map(asset => {
             const coin = result.find((c) => c.id === asset.id)
 
-            //asset price => we bought
-            //coin price => actual(market) price
             return {
-                grow: asset.price < coin.price, // grows
+                ...asset,
+                grow: asset.price < coin.price,
                 growPercent: percentDifference(asset.price, coin.price),
                 totalAmount: asset.amount * coin.price,
                 totalProfit: asset.amount * coin.price - asset.amount * asset.price,
                 name: coin.name,
-                ...asset,
             }
         })
     }
@@ -36,11 +34,19 @@ export function CryptoContextProvider({children}) {
         async function preload() {
             setLoading(true);
             const {result} = await fakeFetchCrypto();
-            const assets = await fetchAssets();
+            const storedAssets = localStorage.getItem('assets');
+            let assets;
+            
+            if (storedAssets) {
+                assets = JSON.parse(storedAssets).map(a => ({
+                    ...a,
+                    date: new Date(a.date)
+                }));
+            } else {
+                assets = await fetchAssets();
+            }
 
-            setAssets(
-                (mapAssets(assets, result)) 
-            );
+            setAssets(mapAssets(assets, result));
             setCrypto(result);
             setLoading(false);
         }
@@ -48,7 +54,17 @@ export function CryptoContextProvider({children}) {
     }, [])
 
     function addAsset(newAsset) {
-        setAssets((prev) => mapAssets([...prev, newAsset], crypto)) //change state->add new asset
+        setAssets((prev) => {
+            const rawPrev = prev.map(a => ({
+                id: a.id,
+                amount: a.amount,
+                price: a.price,
+                date: a.date
+            }));
+            const updatedRawAssets = [...rawPrev, newAsset];
+            localStorage.setItem('assets', JSON.stringify(updatedRawAssets));
+            return mapAssets(updatedRawAssets, crypto);
+        })
     }
 
     return (
