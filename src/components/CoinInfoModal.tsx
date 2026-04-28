@@ -1,8 +1,9 @@
 import { Divider, Tag, Typography } from 'antd';
 import CoinInfo from './CoinInfo';
+import { Coin } from '../types';
 
 
-export default function CoinInfoModal({ coin }) {
+export default function CoinInfoModal({ coin }: { coin: Coin }) {
     return (
         <>
             <CoinInfo coin={coin} withSymbol/>
@@ -43,7 +44,7 @@ export default function CoinInfoModal({ coin }) {
 
             <Typography.Paragraph>
                 <Typography.Text strong>Market Cap: </Typography.Text>
-                {coin.marketCap}$
+                {coin.marketCap.toFixed(0)}$
             </Typography.Paragraph>
 
             {coin.contractAddress && <Typography.Paragraph>

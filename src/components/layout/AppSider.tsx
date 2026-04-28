@@ -4,7 +4,7 @@ import { capitalize } from '../../utils';
 import { useContext } from 'react';
 import CryptoContext from '../../context/crypto-context';
 
-const siderStyle = {
+const siderStyle: React.CSSProperties = {
     padding: '1rem',
 };
  
@@ -14,13 +14,13 @@ export default function AppSider() {
 
     return (
         <Layout.Sider width="25%" style={siderStyle}>
-            {assets.map(asset => (
+            {assets.map((asset) => (
                 <Card key={asset.id} style={{marginBottom: '1rem'}}>
                     <Statistic
                         title={capitalize(asset.id)}
                         value={asset.totalAmount}
                         precision={2}
-                        styles={{ content: { color: asset.grow ?'#3f8600' : '#cf1322'} }}
+                        valueStyle={{ color: asset.grow ? '#3f8600' : '#cf1322' }}
                         prefix={asset.grow ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
                         suffix="$"
                     />
@@ -42,7 +42,7 @@ export default function AppSider() {
                                     )}
                                     {item.isPlain && item.value}
 
-                                    {!item.isPlain && (
+                                    {!item.isPlain && typeof item.value === 'number' && (
                                         <Typography.Text 
                                             type={asset.grow ? 'success' : 'danger'}>{item.value.toFixed(2)}$
                                         </Typography.Text>

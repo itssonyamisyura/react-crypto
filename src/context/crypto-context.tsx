@@ -1,23 +1,37 @@
-import { createContext , useContext, useEffect, useState } from "react";
+import { createContext , useContext, useEffect, useState, ReactNode } from "react";
 import { fetchAssets, fakeFetchCrypto } from '../api';
 import { percentDifference } from "../utils";
+import { Asset, Coin, MappedAsset, CryptoContextValue } from "../types";
 
-const CryptoContext = createContext ({
+const CryptoContext = createContext<CryptoContextValue> ({
     assets: [],
     crypto: [],
     loading: false,
+    addAsset: () => {},
 })
 
 
-export function CryptoContextProvider({children}) {
+export function CryptoContextProvider({ children }: { children: ReactNode }) {
 
     const [loading, setLoading] = useState(false);
-    const [crypto, setCrypto] = useState([]);
-    const [assets, setAssets] = useState([]);
+    const [crypto, setCrypto] = useState<Coin[]>([]);
+    const [assets, setAssets] = useState<MappedAsset[]>([]);
 
-    function mapAssets(assets, result) {
+    function mapAssets(assets: Asset[], result: Coin[]): MappedAsset[] {
         return assets.map(asset => {
             const coin = result.find((c) => c.id === asset.id)
+
+            if (!coin) {
+                // Return a dummy object or handle error
+                return {
+                    ...asset,
+                    grow: false,
+                    growPercent: 0,
+                    totalAmount: 0,
+                    totalProfit: 0,
+                    name: 'Unknown',
+                }
+            }
 
             return {
                 ...asset,
@@ -35,10 +49,10 @@ export function CryptoContextProvider({children}) {
             setLoading(true);
             const {result} = await fakeFetchCrypto();
             const storedAssets = localStorage.getItem('assets');
-            let assets;
+            let assets: Asset[];
             
             if (storedAssets) {
-                assets = JSON.parse(storedAssets).map(a => ({
+                assets = JSON.parse(storedAssets).map((a: any) => ({
                     ...a,
                     date: new Date(a.date)
                 }));
@@ -53,9 +67,9 @@ export function CryptoContextProvider({children}) {
         preload();
     }, [])
 
-    function addAsset(newAsset) {
+    function addAsset(newAsset: Asset) {
         setAssets((prev) => {
-            const rawPrev = prev.map(a => ({
+            const rawPrev: Asset[] = prev.map(a => ({
                 id: a.id,
                 amount: a.amount,
                 price: a.price,
@@ -77,4 +91,4 @@ export default CryptoContext;
 
 export function useCrypto() {
     return useContext(CryptoContext);
-} // now we only import our hook
+}

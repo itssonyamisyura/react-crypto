@@ -10,11 +10,11 @@ export default function PortfolioChart() {
     const {assets} = useCrypto();
 
     const data = {
-        labels: assets.map(a => a.name),
+        labels: assets.map((a) => a.name),
         datasets: [
           {
             label: '$',
-            data: assets.map(a => a.totalAmount),
+            data: assets.map((a) => a.totalAmount),
             backgroundColor: [
               'rgba(255, 99, 132, 1)',
               'rgba(54, 162, 235, 1)',
@@ -38,4 +38,3 @@ export default function PortfolioChart() {
         <Pie data={data}/>
     </div>
 }
-

@@ -3,8 +3,9 @@ import { useCrypto } from '../../context/crypto-context';
 import { useEffect, useState } from 'react';
 import CoinInfoModal from '../CoinInfoModal';
 import AddAssetForm from '../AddAssetForm';
+import { Coin } from '../../types';
 
-const headerStyle = {
+const headerStyle: React.CSSProperties = {
     width: '100%',
     textAlign: 'center',
     height: 60,
@@ -17,13 +18,13 @@ const headerStyle = {
 
 export default function AppHeader() {
     const [select, setSelect] = useState(false);
-    const [coin, setCoin] = useState(null);
+    const [coin, setCoin] = useState<Coin | null>(null);
     const [modal, setModal] = useState(false);
     const [drawer, setDrawer] = useState(false);
     const { crypto } = useCrypto();
 
     useEffect(() => {
-        const keypress = event => {
+        const keypress = (event: KeyboardEvent) => {
             if (event.key === '/') {
                 setSelect((prev) => !prev);
             }
@@ -32,8 +33,8 @@ export default function AppHeader() {
         return () => document.removeEventListener('keypress', keypress);
     }, [])
 
-    function handleSelect(value) {
-        setCoin(crypto.find(c => c.id === value));
+    function handleSelect(value: string) {
+        setCoin(crypto.find((c: Coin) => c.id === value) || null);
         setSelect(false);
         setModal(true);
     }
@@ -47,7 +48,7 @@ export default function AppHeader() {
                 onSelect={handleSelect}
                 onClick={() => setSelect((prev) => !prev)}
                 value='press / to open'
-                options={crypto.map(coin => ({
+                options={crypto.map((coin: Coin) => ({
                     label: coin.name,
                     value: coin.id,
                     icon: coin.icon,
@@ -57,7 +58,7 @@ export default function AppHeader() {
                    <img 
                         style={{width: 20}} 
                         src={option.data.icon} 
-                        alt={option.data.label}
+                        alt={option.data.label as string}
                     /> {' '}
                     {option.data.label}
                 </Space>
@@ -71,15 +72,15 @@ export default function AppHeader() {
                 onCancel={() => setModal(false)}
                 footer={null}
             >
-                <CoinInfoModal coin={coin}/>
+                {coin && <CoinInfoModal coin={coin}/>}
             </Modal>
 
             <Drawer
-                size="600"
+                width={600}
                 title="Add Asset"
                 onClose={() => setDrawer(false)}
                 open={drawer}
-                destroyOnHidden
+                destroyOnClose
             >
                 <AddAssetForm onClose={() => setDrawer(false)}/>
             </Drawer>

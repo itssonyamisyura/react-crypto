@@ -1,6 +1,12 @@
 import { Typography, Flex } from 'antd';
+import { Coin } from '../types';
 
-export default function CoinInfo({ coin, withSymbol }) {
+interface CoinInfoProps {
+    coin: Coin;
+    withSymbol?: boolean;
+}
+
+export default function CoinInfo({ coin, withSymbol }: CoinInfoProps) {
     return (
         <Flex align='center'>
             <img 
@@ -14,4 +20,3 @@ export default function CoinInfo({ coin, withSymbol }) {
         </Flex>
     )
 }
-

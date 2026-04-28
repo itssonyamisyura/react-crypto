@@ -1,11 +1,18 @@
 import { Table } from 'antd';
+import type { TableProps } from 'antd';
 import { useCrypto } from '../context/crypto-context';
 
-const columns = [
+interface DataType {
+  key: string;
+  name: string;
+  price: number;
+  amount: number;
+}
+
+const columns: TableProps<DataType>['columns'] = [
   {
     title: 'Name',
     dataIndex: 'name',
- 
     sorter: (a, b) => a.name.length - b.name.length,
     sortDirections: ['descend'],
   },
@@ -26,14 +33,14 @@ const columns = [
 export default function AssetsTable() {
     const {assets} = useCrypto();
 
-    const data = assets.map(asset => ({
+    const data: DataType[] = assets.map((asset) => ({
         key: asset.id,
         name: asset.name,
         price: asset.price,
         amount: asset.amount,
     }))
 
-    return <Table
+    return <Table<DataType>
         pagination={false}
         columns={columns}
         dataSource={data}

@@ -1,15 +1,16 @@
 import { useState, useRef } from "react"
-import { Select, Space, Typography, Flex, Divider, Form, Button, InputNumber, DatePicker, Result} from 'antd';
+import { Select, Space, Divider, Form, Button, InputNumber, DatePicker, Result} from 'antd';
 import { useCrypto } from '../context/crypto-context';
 import CoinInfo from './CoinInfo';
+import { Coin, Asset } from '../types';
 
 
-export default function AddAssetForm({ onClose }) {
+export default function AddAssetForm({ onClose }: { onClose: () => void }) {
     const [form] = Form.useForm();
     const { crypto, addAsset } = useCrypto();
-    const [coin, setCoin] = useState(null);
+    const [coin, setCoin] = useState<Coin | null>(null);
     const [submitted, setSubmitted] = useState(false);
-    const assetRef = useRef();
+    const assetRef = useRef<Asset>();
 
 
     const validateMessages = {
@@ -23,7 +24,7 @@ export default function AddAssetForm({ onClose }) {
     };
 
 
-    if (submitted) {
+    if (submitted && assetRef.current && coin) {
         return (
             <Result
                 status="success"
@@ -43,9 +44,9 @@ export default function AddAssetForm({ onClose }) {
         return (
             <Select
                 style={{ width: '100%' }}
-                onSelect={(v) => setCoin(crypto.find((c) => c.id === v))}
+                onSelect={(v: string) => setCoin(crypto.find((c: Coin) => c.id === v) || null)}
                 placeholder='Select a coin'
-                options={crypto.map(coin => ({
+                options={crypto.map((coin: Coin) => ({
                     label: coin.name,
                     value: coin.id,
                     icon: coin.icon,
@@ -55,7 +56,7 @@ export default function AddAssetForm({ onClose }) {
                    <img 
                         style={{width: 20}} 
                         src={option.data.icon} 
-                        alt={option.data.label}
+                        alt={option.data.label as string}
                     /> {' '}
                     {option.data.label}
                 </Space>
@@ -64,9 +65,9 @@ export default function AddAssetForm({ onClose }) {
         )
     }
 
-    function onFinish(values) {
-        const newAsset = {
-            id: coin.id,
+    function onFinish(values: { amount: number; price: number; date?: any }) {
+        const newAsset: Asset = {
+            id: coin!.id,
             amount: values.amount,
             price: values.price,
             date: values.date?.$d ?? new Date(),
@@ -76,18 +77,22 @@ export default function AddAssetForm({ onClose }) {
         addAsset(newAsset);
     }
 
-    function handleAmountChange(value) { //value=price
+    function handleAmountChange(value: number | null) {
         const price = form.getFieldValue('price');
-        form.setFieldsValue({
-            total: +(value * price).toFixed(2),
-        })
+        if (value !== null && price !== undefined) {
+            form.setFieldsValue({
+                total: +(value * price).toFixed(2),
+            })
+        }
     }
 
-    function handlePriceChange(value) { //value=price
+    function handlePriceChange(value: number | null) {
         const amount = form.getFieldValue('amount');
-        form.setFieldsValue({
-            total: +(amount * value).toFixed(2),
-        })
+        if (value !== null && amount !== undefined) {
+            form.setFieldsValue({
+                total: +(amount * value).toFixed(2),
+            })
+        }
     }
 
     return (
@@ -131,14 +136,14 @@ export default function AddAssetForm({ onClose }) {
             </Form.Item>
 
             <Form.Item label="Date & Time" name="date">
-                <DatePicker showTime/>
+                <DatePicker showTime style={{ width: '100%' }} />
             </Form.Item>
 
             <Form.Item label="Total" name="total">
                 <InputNumber disabled style={{width: '100%'}}/>
             </Form.Item>
 
-            <Form.Item label={null}>
+            <Form.Item>
             <Button type="primary" htmlType="submit">
                     Add Asset
             </Button>
