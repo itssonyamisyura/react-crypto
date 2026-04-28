@@ -37,5 +37,6 @@ export default function AssetsTable() {
         pagination={false}
         columns={columns}
         dataSource={data}
+        scroll={{ x: 400 }}
   />
 }

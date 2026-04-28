@@ -42,7 +42,7 @@ export default function AppHeader() {
     return (
         <Layout.Header style={headerStyle}>
             <Select
-                style={{ width: 250 }}
+                style={{ width: '100%', maxWidth: 250, marginRight: '10px' }}
                 open={select}
                 onSelect={handleSelect}
                 onClick={() => setSelect((prev) => !prev)}

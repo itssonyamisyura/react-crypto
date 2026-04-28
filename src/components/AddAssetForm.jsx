@@ -94,9 +94,9 @@ export default function AddAssetForm({ onClose }) {
         <Form
             form={form}
             name="basic"
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 10 }}
-            style={{ maxWidth: 600 }}
+            labelCol={{ xs: 24, sm: 8 }}
+            wrapperCol={{ xs: 24, sm: 16 }}
+            style={{ maxWidth: 600, width: '100%' }}
             initialValues={{
                 price: +coin.price.toFixed(2),
             }}
